@@ -8,7 +8,7 @@ export default function Todos(props) {
         {props.todos.length === 0? <h3 className='my-3 text-center text-bg-danger'>No Todos To Display</h3> : 
         props.todos.map((todo) => {
             return (
-            <TodoItem todo={todo} key={todo.sno} onDelete={props.onDelete}/>
+            <TodoItem todo={todo} key={todo.sno} onDelete={props.onDelete} onEdit={props.onEdit}/>
             )
         })
         }

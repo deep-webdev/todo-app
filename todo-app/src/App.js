@@ -37,8 +37,47 @@ function App() {
         }
         setTodos([...todos, myTodo]);
     }
+    const [title, setTitle] = useState("");
+    const [desc, setDesc] = useState("");
+    const submit = (e) =>{
+        e.preventDefault();
+        if (toggleBtn){
+            let obj = todos.filter((e) =>{return e.sno === currTodo.sno})
+            if (title){
+                obj[0].title = title
+            }
+            if (desc){
+                obj[0].description = desc
+            }
+            setTodos([...todos]);
+            setCurrTodo(null);
+            setTitle("");
+            setDesc("");
+            setBtn(false);
 
+        } else{
+            if (!title || !desc){
+                alert("Please set title and Description");
+            }else{
+                addTodo(title, desc);
+                setTitle("");
+                setDesc("");
+            }
+        }
+    }
+    const [toggleBtn, setBtn] = useState(false);
+    const [currTodo, setCurrTodo] = useState(null);
+
+    const onEdit = (sno) =>{
+        setBtn(true);
+        let todo = todos.filter((e)=> {return e.sno === sno})
+        if (todo.length===1){
+            setCurrTodo(todo[0]);
+        }
+    }
+    
     const [todos, setTodos] = useState(initTodo);
+
 
     useEffect(() => {
         localStorage.setItem("todos", JSON.stringify(todos));
@@ -52,8 +91,10 @@ function App() {
         <Routes>
             <Route exact path="/" element={
                     <>
-                    <AddTodo addTodo={addTodo}/>
-                    <Todos todos={todos} onDelete={onDelete}/>
+                    <AddTodo addTodo={addTodo} submit={submit} title={title} desc={desc} 
+                            setTitle={setTitle} setDesc={setDesc} toggleBtn={toggleBtn}
+                            currTodo={currTodo} />
+                    <Todos todos={todos} onDelete={onDelete} onEdit={onEdit}/>
                     </>
                 }>
             </Route>
